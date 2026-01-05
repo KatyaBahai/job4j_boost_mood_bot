@@ -3,10 +3,12 @@ package ru.job4j.bmb.recommendation;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@Service
 @AllArgsConstructor
 public class RecommendationEngine {
-    private final ContentProvider contentProvider;
+   // private final ContentProvider contentProvider;
 
     @PostConstruct
     public void init() {
