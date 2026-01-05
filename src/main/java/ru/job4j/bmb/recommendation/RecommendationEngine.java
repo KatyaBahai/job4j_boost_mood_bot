@@ -1,4 +1,4 @@
-package ru.job4j.bmb.recommendation.recommendation;
+package ru.job4j.bmb.recommendation;
 
 import lombok.AllArgsConstructor;
 
