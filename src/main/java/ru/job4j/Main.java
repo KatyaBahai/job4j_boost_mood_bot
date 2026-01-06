@@ -16,7 +16,9 @@ public class Main {
     }
 
     @Bean
-    public CommandLineRunner initTelegramApi(AppConfig appConfig) {
-        return args -> appConfig.print();
+    public CommandLineRunner checkEnv(ApplicationContext ctx) {
+        return args -> {
+            System.out.println(ctx.getEnvironment().getProperty("telegram.bot.name"));
+        };
     }
 }
