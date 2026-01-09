@@ -2,7 +2,6 @@ package ru.job4j.bmb.service;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.job4j.bmb.repository.UserRepository;
 import ru.job4j.bmb.telegramapi.TgRemoteService;
 
