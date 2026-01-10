@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.job4j.bmb.repository.UserRepository;
-import ru.job4j.model.User;
+import ru.job4j.bmb.model.User;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -53,7 +53,7 @@ public class TgRemoteService extends TelegramLongPollingBot {
     public static String getResponse(String mood) {
         return MOOD_RESP.getOrDefault(mood,
                 """
-                        Sorry, I didn't understand you, 
+                        Sorry, I didn't understand you,
                         but everything is going to be just fine!
                         """);
     }
