@@ -10,18 +10,4 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class TelegramBotService {
     private final BotCommandHandler handler;
-
-    public void receive(Content content) {
-        handler.receive(content);
-    }
-
-    @PostConstruct
-    public void init() {
-        System.out.println("The bean is going through init.");
-    }
-
-    @PreDestroy
-    public void destroy() {
-        System.out.println("The bean is going to be destroyed now.");
-    }
 }
