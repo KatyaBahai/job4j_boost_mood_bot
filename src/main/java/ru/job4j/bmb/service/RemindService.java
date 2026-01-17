@@ -2,23 +2,43 @@ package ru.job4j.bmb.service;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import ru.job4j.bmb.repository.UserRepository;
-import ru.job4j.bmb.telegramapi.TelegramBotService;
+import ru.job4j.bmb.content.Content;
+import ru.job4j.bmb.content.SendContent;
+import ru.job4j.bmb.repository.MoodLogRepository;
+import ru.job4j.bmb.telegramapi.TgUI;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
 
 @Service
 public class RemindService {
-    private final TelegramBotService telegramBotService;
-    private final UserRepository userRepository;
+    private final SendContent sendContent;
+    private final MoodLogRepository moodLogRepository;
+    private final TgUI tgUI;
 
-    public RemindService(TelegramBotService telegramBotService, UserRepository userRepository) {
-        this.telegramBotService = telegramBotService;
-        this.userRepository = userRepository;
+    public RemindService(SendContent sentContent,
+                         MoodLogRepository moodLogRepository, TgUI tgUI) {
+        this.sendContent = sentContent;
+        this.moodLogRepository = moodLogRepository;
+        this.tgUI = tgUI;
     }
 
-    @Scheduled(fixedRateString = "${remind.period}")
-    public void ping() {
-        for (var user : userRepository.findAll()) {
-            telegramBotService.sendMessage(user.getChatId(), "Ping");
+    @Scheduled(fixedRateString = "${recommendation.alert.period}")
+    public void remindUsers() {
+        var startOfDay = LocalDate.now()
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli();
+        var endOfDay = LocalDate.now()
+                .plusDays(1)
+                .atStartOfDay(ZoneId.systemDefault())
+                .toInstant()
+                .toEpochMilli() - 1;
+        for (var user : moodLogRepository.findUsersWhoDidNotVoteToday(startOfDay, endOfDay)) {
+            var content = new Content(user.getChatId());
+            content.setText("Как настроение?");
+            content.setMarkup(tgUI.buildButtons());
+            sendContent.send(content);
         }
     }
 }

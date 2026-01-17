@@ -10,4 +10,6 @@ import java.util.Optional;
 @Repository
 public interface MoodRepository extends JpaRepository<Mood, Long> {
     Optional<Mood> findByText(String moodText);
+
+    void add(Mood mood);
 }
