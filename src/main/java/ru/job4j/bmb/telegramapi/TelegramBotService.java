@@ -49,7 +49,6 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
 
     @Override
     public void send(Content content) {
-        LOG.info("Sending content chat {}", content.getChatId());
         try {
             if (content.getAudio() != null) {
                 SendAudio sendAudio = SendAudio.builder()
@@ -74,6 +73,7 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
                 execute(sendMessage);
             }
         } catch (TelegramApiException e) {
+            LOG.error("There's something wrong with the send content method, no content could be provided.", e);
             throw new SendContentException("Could not provide content for your request, try again later", e);
         }
     }
@@ -82,7 +82,7 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
         try {
             execute(message);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            LOG.error("Could not execute the given message: {}", message.getText(), e);
         }
     }
 
