@@ -3,11 +3,11 @@ package ru.job4j.bmb.service;
 import org.junit.jupiter.api.Test;
 import ru.job4j.bmb.content.SendContent;
 import ru.job4j.bmb.repository.MoodLogRepository;
+import ru.job4j.bmb.repository.MoodRepository;
 import ru.job4j.bmb.telegramapi.TgUI;
 import ru.job4j.bmb.content.Content;
 import ru.job4j.bmb.model.Mood;
 import ru.job4j.bmb.model.User;
-import ru.job4j.bmb.repository.FakeMoodRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,11 +28,13 @@ class RemindServiceTest {
             }
         };
 
-        var moodRepository = new FakeMoodRepository();
-        moodRepository.add(Mood.builder()
+        Mood mood = Mood.builder()
                 .text("Good")
                 .good(true)
-                .build());
+                .build();
+        var moodRepository = mock(MoodRepository.class);
+        when(moodRepository.findAll())
+                .thenReturn(List.of(mood));
 
         var moodLogRepository = mock(MoodLogRepository.class);
         var user = new User();
