@@ -1,5 +1,7 @@
 package ru.job4j.bmb.telegramapi;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -18,6 +20,8 @@ import ru.job4j.bmb.exception.SendContentException;
 public class TelegramBotService extends TelegramLongPollingBot implements SendContent {
     private final BotCommandHandler handler;
     private final String botName;
+
+    private static final Logger LOG = LoggerFactory.getLogger(TelegramBotService.class);
 
     public TelegramBotService(@Value("${telegram.bot.name}") String botName,
                               @Value("${telegram.bot.token}") String botToken,
@@ -45,6 +49,7 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
 
     @Override
     public void send(Content content) {
+        LOG.info("Sending content chat {}", content.getChatId());
         try {
             if (content.getAudio() != null) {
                 SendAudio sendAudio = SendAudio.builder()
