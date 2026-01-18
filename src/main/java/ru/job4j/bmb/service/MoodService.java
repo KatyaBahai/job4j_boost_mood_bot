@@ -1,17 +1,14 @@
 package ru.job4j.bmb.service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import jakarta.persistence.EntityNotFoundException;
-import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.BeanNameAware;
+import org.springframework.context.ApplicationEventPublisher;
 import ru.job4j.bmb.content.Content;
+import ru.job4j.bmb.event.UserEvent;
 import ru.job4j.bmb.model.Achievement;
 import ru.job4j.bmb.model.Mood;
 import ru.job4j.bmb.model.MoodLog;
 import ru.job4j.bmb.model.User;
 import ru.job4j.bmb.recommendation.RecommendationEngine;
-import ru.job4j.bmb.repository.AchievementRepository;
 import ru.job4j.bmb.repository.MoodLogRepository;
 import org.springframework.stereotype.Service;
 import ru.job4j.bmb.repository.MoodRepository;
@@ -33,6 +30,7 @@ public class MoodService {
     private final UserRepository userRepository;
     private final AchievementService achievementService;
     private final MoodRepository moodRepository;
+    private final ApplicationEventPublisher publisher;
     private final DateTimeFormatter formatter = DateTimeFormatter
             .ofPattern("dd-MM-yyyy HH:mm")
             .withZone(ZoneId.systemDefault());
@@ -41,12 +39,13 @@ public class MoodService {
                        RecommendationEngine recommendationEngine,
                        UserRepository userRepository,
                        AchievementService achievementService,
-                       MoodRepository moodRepository) {
+                       MoodRepository moodRepository, ApplicationEventPublisher publisher) {
         this.moodLogRepository = moodLogRepository;
         this.recommendationEngine = recommendationEngine;
         this.userRepository = userRepository;
         this.achievementService = achievementService;
         this.moodRepository = moodRepository;
+        this.publisher = publisher;
     }
 
     private void saveMoodLog(User user, Long moodId) {
@@ -63,6 +62,7 @@ public class MoodService {
 
     public Content chooseMood(User user, Long moodId) {
         saveMoodLog(user, moodId);
+        publisher.publishEvent(new UserEvent(this, user));
         return recommendationEngine.recommendFor(user.getChatId(), moodId);
     }
 
