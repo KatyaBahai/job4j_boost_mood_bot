@@ -1,9 +1,6 @@
 package ru.job4j.bmb.service;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.bmb.content.Content;
@@ -64,7 +61,6 @@ public class AchievementService implements ApplicationListener<UserEvent> {
                 .creationDate(Instant.now().toEpochMilli())
                 .user(user)
                 .build());
-
 
         sendContent.send(content);
     }
