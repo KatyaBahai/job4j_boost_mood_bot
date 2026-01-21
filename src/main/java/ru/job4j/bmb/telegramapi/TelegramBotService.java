@@ -33,7 +33,7 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
     @Autowired
     public TelegramBotService(@Value("${telegram.bot.name}") String botName,
                               @Value("${telegram.bot.token}") String botToken,
-                              @Lazy BotCommandHandler handler) {
+                              BotCommandHandler handler) {
         super(botToken);
         this.handler = handler;
         this.botName = botName;

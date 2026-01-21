@@ -1,10 +1,12 @@
 package ru.job4j.bmb.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationListener;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.bmb.content.Content;
 import ru.job4j.bmb.content.SendContent;
+import ru.job4j.bmb.event.AchievementEvent;
 import ru.job4j.bmb.event.UserEvent;
 import ru.job4j.bmb.model.Achievement;
 import ru.job4j.bmb.model.Award;
@@ -24,8 +26,7 @@ public class AchievementService implements ApplicationListener<UserEvent> {
     private final AchievementRepository achievementRepository;
     private final MoodLogRepository moodLogRepository;
     private final AwardRepository awardRepository;
-
-    private final SendContent sendContent;
+    private final ApplicationEventPublisher eventsPublisher;
 
     public List<Achievement> findAllByUserId(Long userId) {
         return achievementRepository.findAllByUserId(userId);
@@ -47,10 +48,6 @@ public class AchievementService implements ApplicationListener<UserEvent> {
             goodStreakDays++;
         }
 
-        Content content = Content.builder()
-                .chatId(user.getChatId())
-                .build();
-
         Optional<Award> awardOpt = awardRepository.findByDays(goodStreakDays);
         if (awardOpt.isEmpty()) {
             return;
@@ -61,7 +58,6 @@ public class AchievementService implements ApplicationListener<UserEvent> {
                 .creationDate(Instant.now().toEpochMilli())
                 .user(user)
                 .build());
-
-        sendContent.send(content);
+        eventsPublisher.publishEvent(new AchievementEvent(user.getChatId(), award.getTitle()));
     }
 }
