@@ -35,6 +35,10 @@ public class RemindService {
                 .toInstant()
                 .toEpochMilli() - 1;
         for (var user : moodLogRepository.findUsersWhoDidNotVoteToday(startOfDay, endOfDay)) {
+            if (user.getChatId() == 0) {
+                System.out.println("Skipping user without chatId: " + user);
+                continue;
+            }
             var content = new Content(user.getChatId());
             content.setText("Как настроение?");
             content.setMarkup(tgUI.buildButtons());

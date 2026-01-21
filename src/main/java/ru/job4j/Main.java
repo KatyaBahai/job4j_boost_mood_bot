@@ -27,20 +27,6 @@ public class Main {
     }
 
     @Bean
-    public CommandLineRunner checkEnv(ApplicationContext ctx) {
-        return args -> {
-            var bot = ctx.getBean(TelegramBotService.class);
-            var botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            try {
-                botsApi.registerBot(bot);
-                System.out.println("Бот успешно зарегистрирован");
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        };
-    }
-
-    @Bean
     CommandLineRunner loadDatabase(MoodRepository moodRepository,
                                    MoodContentRepository moodContentRepository,
                                    AwardRepository awardRepository) {

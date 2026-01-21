@@ -15,7 +15,6 @@ import ru.job4j.bmb.repository.AwardRepository;
 import ru.job4j.bmb.repository.MoodLogRepository;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,6 +24,7 @@ public class AchievementService implements ApplicationListener<UserEvent> {
     private final AchievementRepository achievementRepository;
     private final MoodLogRepository moodLogRepository;
     private final AwardRepository awardRepository;
+
     private final SendContent sendContent;
 
     public List<Achievement> findAllByUserId(Long userId) {

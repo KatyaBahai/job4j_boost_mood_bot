@@ -18,8 +18,8 @@ public interface MoodLogRepository extends JpaRepository<MoodLog, Long> {
             WHERE NOT EXISTS (
             SELECT 1 FROM MoodLog ml
             WHERE ml.user.id = u.id
-            AND ml.createdAt >= :startOfDay
-            AND ml.createdAt <= :endOfDay
+            AND ml.creationDate >= :startOfDay
+            AND ml.creationDate <= :endOfDay
             )""")
     List<User> findUsersWhoDidNotVoteToday(@Param("startOfDay") long startOfDay,
                                            @Param("endOfDay")  long endOfDay);

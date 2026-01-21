@@ -1,14 +1,20 @@
 package ru.job4j.bmb.telegramapi;
 
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Lazy;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import ru.job4j.bmb.condition.OnFakeTgModeCondition;
+import ru.job4j.bmb.condition.OnRealTgModeCondition;
 import ru.job4j.bmb.content.Content;
 import org.springframework.stereotype.Service;
 import ru.job4j.bmb.content.SendContent;
@@ -18,14 +24,15 @@ import ru.job4j.bmb.exception.SendContentException;
 @Service
 @AllArgsConstructor
 public class TelegramBotService extends TelegramLongPollingBot implements SendContent {
-    private final BotCommandHandler handler;
-    private final String botName;
+    private BotCommandHandler handler;
+    private String botName;
 
     private static final Logger LOG = LoggerFactory.getLogger(TelegramBotService.class);
 
+    @Autowired
     public TelegramBotService(@Value("${telegram.bot.name}") String botName,
                               @Value("${telegram.bot.token}") String botToken,
-                              BotCommandHandler handler) {
+                              @Lazy BotCommandHandler handler) {
         super(botToken);
         this.handler = handler;
         this.botName = botName;
