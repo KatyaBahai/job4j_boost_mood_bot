@@ -22,7 +22,8 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.job4j.bmb.exception.SendContentException;
 
 @Service
-@AllArgsConstructor
+@NoArgsConstructor
+@Conditional(OnRealTgModeCondition.class)
 public class TelegramBotService extends TelegramLongPollingBot implements SendContent {
     private BotCommandHandler handler;
     private String botName;
