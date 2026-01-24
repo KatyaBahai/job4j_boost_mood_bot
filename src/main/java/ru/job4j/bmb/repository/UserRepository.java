@@ -14,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByClientId(Long clientId);
 
     User save(User user);
+
+    boolean existsByClientId(long clientId);
 }

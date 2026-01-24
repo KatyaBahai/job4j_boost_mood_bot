@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import ru.job4j.bmb.content.Content;
@@ -14,6 +15,7 @@ import ru.job4j.bmb.content.SendContent;
 @Setter
 @Component
 public class AchievementNotificationListener {
+    @Autowired
     private SendContent sendContent;
 
     public AchievementNotificationListener(SendContent sendContent) {

@@ -8,20 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-import ru.job4j.bmb.condition.OnFakeTgModeCondition;
 import ru.job4j.bmb.condition.OnRealTgModeCondition;
 import ru.job4j.bmb.content.Content;
-import org.springframework.stereotype.Service;
 import ru.job4j.bmb.content.SendContent;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.job4j.bmb.exception.SendContentException;
 
-@Service
+@Component
 @NoArgsConstructor
 @Conditional(OnRealTgModeCondition.class)
 public class TelegramBotService extends TelegramLongPollingBot implements SendContent {
@@ -42,8 +43,19 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {
-            handler.handleCallback(update.getCallbackQuery())
-                    .ifPresent(this::send);
+            CallbackQuery cb = update.getCallbackQuery();
+            LOG.info("✅ CALLBACK: id={}, data='{}', chatId={}",
+                    cb.getId(), cb.getData(), cb.getMessage().getChatId());
+            handler.handleButtonCallback(update.getCallbackQuery()).ifPresent(this::send);
+            handler.handleCallback(update.getCallbackQuery()).ifPresent(this::send);
+            try {
+                AnswerCallbackQuery acq = AnswerCallbackQuery.builder()
+                        .callbackQueryId(update.getCallbackQuery().getId())
+                        .build();
+                execute(acq);
+            } catch (TelegramApiException e) {
+                LOG.error("Failed to answer callback", e);
+            }
         } else if (update.hasMessage() && update.getMessage().getText() != null) {
             handler.commands(update.getMessage())
                     .ifPresent(this::send);

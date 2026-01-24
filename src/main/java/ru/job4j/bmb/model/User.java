@@ -6,18 +6,19 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "mb_user")
+@Table(name = "mb_user", uniqueConstraints = @UniqueConstraint(columnNames = "clientId"))
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "client_id")
+    @Column(name = "client_id", unique = true, nullable = false)
     private long clientId;
 
     @Column(name = "chat_id")
