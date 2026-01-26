@@ -4,7 +4,7 @@ A Telegram bot designed to track your daily mood, log entries, and send motivati
 
 ### Features
 - User Registration: New users register with /start.
-- Daily Mood Logging: Choose your mood (e.g., 😊 good, 😐 neutral, 😢 bad).
+- Daily Mood Logging: Choose your mood.
 - Mood History: View your mood log for the last week (/week) or month (/month).
 - Streak Rewards: Automatic awards for consecutive good mood days.
 - Mood Boosters: On-demand humor, audio, and visual content to lift spirits.
