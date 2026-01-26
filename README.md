@@ -1,3 +1,65 @@
+[English version](https://github.com/KatyaBahai/job4j_boost_mood_bot/blob/main/README.md#english-version)
+
+## Job4j Boost Mood Bot
+
+Telegram-бот для отслеживания ежедневного настроения, ведения дневника настроения и отправки мотивационных наград (аудио, фото, текст) при достижении последовательности хороших дней. Главная цель: стать другом в кармане, который поднимает настроение с помощью юмора, сочувствия и поддержки.
+
+## Функциональность: 
+
+- Регистрация пользователей: Новые пользователи регистрируются командой /start.
+
+- Ежедневная запись настроения: Выберите своё настроение.
+
+- История настроения: Просмотр лога настроения за последнюю неделю (/week) или месяц (/month).
+
+- Награды: Автоматические награды за последовательные дни хорошего настроения.
+
+- Поднимаем настроение: По запросу — юмор, аудио и визуальный контент для поднятия духа.
+
+## Инструкции по установке:
+- Склонируйте репозиторий:
+```
+git clone <repository-url>
+```
+- Получите токен бота:
+Напишите @BotFather в Telegram
+
+/newbot → следуйте инструкциям → скопируйте токен
+- Отредактируйте src/main/resources/application.properties, добавив свой токен Telegram-бота:
+```
+telegram.bot.token=.....
+```
+- Запустите приложение одним из следующих способов:
+* Через основной класс:
+  
+Перейдите в src/main/java/ru/job4j/bmb и запустите класс Main.
+
+* Через Maven:
+* 
+Скомпилируйте и запустите проект командой:
+```
+mvn spring-boot:run
+```
+- Откройте своего бота в Telegram и нажмите start!
+
+## Используемые технологии
+- Java 21
+- Spring Boot 3.3.3
+- H2(встроенная) + Spring Data JPA
+- telegrambots 6.9.7.1
+- JUnit 5, Mockito, AssertJ
+- Checkstyle 10.3.3
+- Lombok, AOP
+
+## Контакты
+Катя Щербакова
+
+Для связи в Telegram: @Midori_Sun
+
+
+
+### English version:
+
 ## Job4j Boost Mood Bot
 
 A Telegram bot designed to track your daily mood, log entries, and send motivational rewards (audio, photos, text) when you hit streaks of good mood days. Its ultimate goal: be the friend in your pocket that brightens your day with humor, sympathy, and support.
