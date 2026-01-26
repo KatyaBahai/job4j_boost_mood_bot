@@ -66,10 +66,10 @@ Katya Shcherbakova
 
 You can reach out via Telegram: @Midori_Sun
 
-![Screenshot_1]()
+![Screenshot_1](docs/screenshots/Screenshot_1.jpg)
 
-![Screenshot_9]()
+![Screenshot_2](docs/screenshots/Screenshot_2.jpg)
 
-![Screenshot_13]()
+![Screenshot_3](docs/screenshots/Screenshot_3.jpg)
 
-![Screenshot_14]()
+![Screenshot_4](docs/screenshots/Screenshot_4.jpg)
