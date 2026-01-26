@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendAudio;
 import org.telegram.telegrambots.meta.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboard;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.job4j.bmb.condition.OnRealTgModeCondition;
 import ru.job4j.bmb.content.Content;
@@ -44,7 +45,7 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
     public void onUpdateReceived(Update update) {
         if (update.hasCallbackQuery()) {
             CallbackQuery cb = update.getCallbackQuery();
-            LOG.info("✅ CALLBACK: id={}, data='{}', chatId={}",
+            LOG.info("✅ CALLBACK: id={}, data='{}', chatId={}, method OnUpdateReceived, from class TelegramBotService",
                     cb.getId(), cb.getData(), cb.getMessage().getChatId());
             handler.handleButtonCallback(update.getCallbackQuery()).ifPresent(this::send);
             handler.handleCallback(update.getCallbackQuery()).ifPresent(this::send);
@@ -88,7 +89,7 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
                 SendMessage sendMessage = SendMessage.builder()
                         .chatId(content.getChatId())
                         .text(content.getText())
-                        .replyMarkup(content.getMarkup())
+                        .replyMarkup(getReplyMarkup(content))
                         .build();
                 execute(sendMessage);
             }
@@ -96,6 +97,15 @@ public class TelegramBotService extends TelegramLongPollingBot implements SendCo
             LOG.error("There's something wrong with the send content method, no content could be provided.", e);
             throw new SendContentException("Could not provide content for your request, try again later", e);
         }
+    }
+
+    private ReplyKeyboard getReplyMarkup(Content content) {
+        if (content.getReplyMarkup() != null) {
+            return content.getReplyMarkup();
+        } else if (content.getMarkup() != null) {
+            return content.getMarkup();
+        }
+        return null;
     }
 
     private void send(SendMessage message) {

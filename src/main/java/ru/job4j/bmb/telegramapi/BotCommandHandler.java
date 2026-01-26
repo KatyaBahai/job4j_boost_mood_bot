@@ -2,7 +2,6 @@ package ru.job4j.bmb.telegramapi;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.transaction.annotation.Transactional;
 import ru.job4j.bmb.model.User;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
@@ -35,10 +34,10 @@ public class BotCommandHandler {
     }
 
     private Optional<Content> respondToNewUser(long clientId, long chatId) {
-            return Optional.of(Content.builder()
-                    .chatId(chatId)
-                    .text("Sorry, no user registered yet, please, type /start.")
-                    .build());
+        return Optional.of(Content.builder()
+                .chatId(chatId)
+                .text("Sorry, no user registered yet, please, type /start.")
+                .build());
     }
 
     Optional<Content> commands(Message message) {
@@ -47,13 +46,14 @@ public class BotCommandHandler {
 
         return switch (message.getText()) {
             case "/start" -> handleStartCommand(chatId, clientId);
-            case "/week_mood_log" -> userRepository.existsByClientId(clientId)
+            case "choose you mood" -> handleMoodCommand(chatId, clientId);
+            case "week mood log" -> userRepository.existsByClientId(clientId)
                     ? moodService.weekMoodLogCommand(chatId, clientId)
                     : respondToNewUser(chatId, clientId);
-            case "/month_mood_log" -> userRepository.existsByClientId(clientId)
+            case "month mood log" -> userRepository.existsByClientId(clientId)
                     ? moodService.monthMoodLogCommand(chatId, clientId)
                     : respondToNewUser(chatId, clientId);
-            case "/award" -> userRepository.existsByClientId(clientId)
+            case "awards" -> userRepository.existsByClientId(clientId)
                     ? moodService.awards(chatId, clientId)
                     : respondToNewUser(chatId, clientId);
             default -> Optional.empty();
@@ -89,7 +89,7 @@ public class BotCommandHandler {
     }
 
     @Transactional
-    private Optional<Content> handleStartCommand(long chatId, Long clientId) {
+    private Optional<Content> handleMoodCommand(long chatId, Long clientId) {
         Optional<User> existingUser = userRepository.findByClientId(clientId);
         if (existingUser.isPresent()) {
             User user = existingUser.get();
@@ -100,6 +100,27 @@ public class BotCommandHandler {
         newUser.setChatId(chatId);
         userRepository.save(newUser);
         return createContent(newUser);
+    }
+
+    @Transactional
+    private Optional<Content> handleStartCommand(long chatId, Long clientId) {
+        Optional<User> existingUser = userRepository.findByClientId(clientId);
+        if (existingUser.isPresent()) {
+            return Optional.of(Content.builder()
+                    .chatId(chatId)
+                    .text("Hello, my friend! Welcome back!")
+                    .replyMarkup(tgUI.mainMenu())
+                    .build());
+        }
+        User newUser = new User();
+        newUser.setClientId(clientId);
+        newUser.setChatId(chatId);
+        userRepository.save(newUser);
+        return Optional.of(Content.builder()
+                .chatId(chatId)
+                .text("Hello! Welcome to The Make Feel Better Bot!")
+                .replyMarkup(tgUI.mainMenu())
+                .build());
     }
 
     private Optional<Content> createContent(User user) {

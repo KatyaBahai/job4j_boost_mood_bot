@@ -17,8 +17,12 @@ import ru.job4j.bmb.repository.AwardRepository;
 import ru.job4j.bmb.repository.MoodLogRepository;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -41,11 +45,18 @@ public class AchievementService implements ApplicationListener<UserEvent> {
                 .findByUserIdOrderByCreationDateDescYearLimit(user.getId());
 
         int goodStreakDays = 0;
+        Set<LocalDate> goodDates = new HashSet<>();
+
         for (MoodLog moodLog : recentMoodLogs) {
             if (!moodLog.getMood().isGood()) {
                 break;
             }
-            goodStreakDays++;
+            LocalDate logDate = LocalDate.ofInstant(
+                    Instant.ofEpochMilli(moodLog.getCreationDate()),
+                    ZoneId.systemDefault()
+            );
+            goodDates.add(logDate);
+            goodStreakDays = goodDates.size();
         }
 
         Optional<Award> awardOpt = awardRepository.findByDays(goodStreakDays);
