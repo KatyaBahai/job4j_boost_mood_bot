@@ -31,11 +31,8 @@ telegram.bot.token=.....
 ```
 - Запустите приложение одним из следующих способов:
 * Через основной класс:
-  
 Перейдите в src/main/java/ru/job4j/bmb и запустите класс Main.
-
 * Через Maven:
-* 
 Скомпилируйте и запустите проект командой:
 ```
 mvn spring-boot:run
@@ -56,7 +53,7 @@ mvn spring-boot:run
 
 Для связи в Telegram: @Midori_Sun
 
-
+[Скриншоты бота](https://github.com/KatyaBahai/job4j_boost_mood_bot/blob/main/README.md#screenshots)
 
 ### English version:
 
@@ -127,6 +124,8 @@ Lombok, AOP
 Katya Shcherbakova
 
 You can reach out via Telegram: @Midori_Sun
+
+### Screenshots:
 
 ![Screenshot_1](docs/screenshots/Screenshot_1.jpg)
 
